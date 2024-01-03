@@ -2,15 +2,15 @@ api = "0.7"
 
 [buildpack]
   description = "A buildpack for installing the appropriate Go compiler distribution version"
-  homepage = "https://github.com/paketo-buildpacks/go-dist"
-  id = "paketo-buildpacks/go-dist"
+  homepage = "https://github.com/initializ-buildpacks/go-dist"
+  id = "initializ-buildpacks/go-dist"
   keywords = ["go", "distribution", "compiler"]
   name = "Paketo Buildpack for Go Distribution"
   sbom-formats = ["application/vnd.cyclonedx+json", "application/spdx+json", "application/vnd.syft+json"]
 
   [[buildpack.licenses]]
     type = "Apache-2.0"
-    uri = "https://github.com/paketo-buildpacks/go-dist/blob/main/LICENSE"
+    uri = "https://github.com/initializ-buildpacks/go-dist/blob/main/LICENSE"
 
 [metadata]
   include-files = ["bin/run", "bin/build", "bin/detect", "buildpack.toml"]

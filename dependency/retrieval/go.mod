@@ -1,4 +1,4 @@
-module github.com/paketo-buildpacks/go-dist/dependency/retrieval
+module github.com/initializ-buildpacks/go-dist/dependency/retrieval
 
 go 1.20
 

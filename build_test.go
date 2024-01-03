@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	godist "github.com/paketo-buildpacks/go-dist"
-	"github.com/paketo-buildpacks/go-dist/fakes"
+	godist "github.com/initializ-buildpacks/go-dist"
+	"github.com/initializ-buildpacks/go-dist/fakes"
 	"github.com/paketo-buildpacks/packit/v2"
 	"github.com/paketo-buildpacks/packit/v2/chronos"
 

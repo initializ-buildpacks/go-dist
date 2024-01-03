@@ -1,4 +1,4 @@
-module github.com/paketo-buildpacks/go-dist
+module github.com/initializ-buildpacks/go-dist
 
 go 1.18
 

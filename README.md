@@ -6,13 +6,13 @@ binary distribution onto the `$PATH` which makes it available for subsequent
 buildpacks. These buildpacks can then use that distribution to run Go tooling
 including building Go application binaries. Examples of buildpacks that perform
 this binary building process include the [Go Mod
-CNB](https://github.com/paketo-buildpacks/go-mod) and the [Dep
+CNB](https://github.com/initializ-buildpacks/go-mod) and the [Dep
 CNB](https://github.com/paketo-buildpacks/dep).
 
 ## Integration
 
 The Go Distribution CNB provides Go as a dependency. Downstream buildpacks, like
-[Go Mod](https://github.com/paketo-buildpacks/go-mod) or
+[Go Mod](https://github.com/initializ-buildpacks/go-mod) or
 [Dep](https://github.com/paketo-buildpacks/dep), can require the go dependency
 by generating a [Build Plan
 TOML](https://github.com/buildpacks/spec/blob/master/buildpack.md#build-plan-toml)

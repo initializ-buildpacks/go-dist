@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/Masterminds/semver/v3"
-	"github.com/paketo-buildpacks/go-dist/dependency/retrieval/components"
+	"github.com/initializ-buildpacks/go-dist/dependency/retrieval/components"
 	"github.com/sclevine/spec"
 
 	. "github.com/onsi/gomega"

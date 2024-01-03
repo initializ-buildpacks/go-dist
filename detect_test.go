@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	godist "github.com/paketo-buildpacks/go-dist"
+	godist "github.com/initializ-buildpacks/go-dist"
 	"github.com/paketo-buildpacks/packit/v2"
 	"github.com/sclevine/spec"
 

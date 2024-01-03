@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/paketo-buildpacks/go-dist/dependency/retrieval/components"
+	"github.com/initializ-buildpacks/go-dist/dependency/retrieval/components"
 	"github.com/paketo-buildpacks/packit/v2/cargo"
 )
 
