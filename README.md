@@ -6,7 +6,7 @@ binary distribution onto the `$PATH` which makes it available for subsequent
 buildpacks. These buildpacks can then use that distribution to run Go tooling
 including building Go application binaries. Examples of buildpacks that perform
 this binary building process include the [Go Mod
-CNB](https://github.com/initializ-buildpacks/go-mod) and the [Dep
+CNB](https://github.com/initializ-buildpacks/go-mod-vendor) and the [Dep
 CNB](https://github.com/paketo-buildpacks/dep).
 
 ## Integration
