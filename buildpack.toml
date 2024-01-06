@@ -3,7 +3,7 @@ api = "0.7"
 [buildpack]
   description = "A buildpack for installing the appropriate Go compiler distribution version"
   homepage = "https://github.com/initializ-buildpacks/go-dist"
-  id = "initializ-buildpacks/go-dist"
+  id = "initializ-buildpack/go-dist"
   keywords = ["go", "distribution", "compiler"]
   name = "Initializ Buildpack for Go Distribution"
   sbom-formats = ["application/vnd.cyclonedx+json", "application/spdx+json", "application/vnd.syft+json"]
