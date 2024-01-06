@@ -5,7 +5,7 @@ api = "0.7"
   homepage = "https://github.com/initializ-buildpacks/go-dist"
   id = "initializ-buildpacks/go-dist"
   keywords = ["go", "distribution", "compiler"]
-  name = "Paketo Buildpack for Go Distribution"
+  name = "Initializ Buildpack for Go Distribution"
   sbom-formats = ["application/vnd.cyclonedx+json", "application/spdx+json", "application/vnd.syft+json"]
 
   [[buildpack.licenses]]
