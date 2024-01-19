@@ -39,11 +39,13 @@ jobs:
           exit 1
         fi
 
-    - name: Push to ECR
+    - name: Configure AWS credentials from AWS account
+      uses: aws-actions/configure-aws-credentials@v1
       with:
         role-to-assume: ${{ secrets.AWS_PUBLICECR_ROLE }}
         aws-region: ${{ secrets.AWS_PUBLICECR_REGION }}
         role-session-name: GitHub-OIDC-SECURE-IMAGES
+        
       run: |
       
           aws ecr get-login-password --region ${{ secrets.AWS_PUBLICECR_REGION }} | sudo docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}
