@@ -1,7 +1,7 @@
 name: Create or Update Draft Release
 
 on:
-  push:
+  workflow_dispatch:
     branches:
     - main
   repository_dispatch:
