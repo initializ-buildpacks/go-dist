@@ -3,15 +3,10 @@ name: Create or Update Draft Release
 on:
   workflow_dispatch:
     branches:
-    - main
+      - main
   repository_dispatch:
     types: [ version-bump ]
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version of the release to cut (e.g. 1.2.3)'
-        required: false
-
+  
 concurrency: release
 
 jobs:
@@ -34,8 +29,7 @@ jobs:
       run: |
         source "${{ github.workspace }}/scripts/.util/builders.sh"
         builders="$(util::builders::list "${{ github.workspace }}/integration.json")"
-        printf "Output: %s\n" "${builders}"
-        printf "builders=%s\n" "${builders}" >> "$GITHUB_OUTPUT"
+        echo "builders=${builders}" >> "$GITHUB_ENV"
 
   integration:
     name: Integration Tests
@@ -43,7 +37,7 @@ jobs:
     needs: unit
     strategy:
       matrix:
-        builder: ${{ fromJSON(needs.unit.outputs.builders) }}
+        builder: ${{fromJson(needs.unit.outputs.builders)}}
       fail-fast: false  # don't cancel all test jobs when one fails
     steps:
     - name: Setup Go
@@ -91,7 +85,7 @@ jobs:
         if [ -z "${tag}" ]; then
           tag="${{ steps.semver.outputs.tag }}"
         fi
-        echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+        echo "tag=${tag}" >> "$GITHUB_ENV"
     - name: Package
       run: ./scripts/package.sh --version "${{ steps.tag.outputs.tag }}"
     - name: Create Release Notes
@@ -128,7 +122,7 @@ jobs:
     name: Alert on Failure
     runs-on: ubuntu-22.04
     needs: [ unit, integration, release ]
-    if: ${{ always() && needs.unit.result == 'failure' || needs.integration.result == 'failure' || needs.release.result == 'failure' }}
+    if: ${{ always() && (needs.unit.result == 'failure' || needs.integration.result == 'failure' || needs.release.result == 'failure') }}
     steps:
     - name: File Failure Alert Issue
       uses: paketo-buildpacks/github-config/actions/issue/file@main
@@ -139,6 +133,5 @@ jobs:
         comment_if_exists: true
         issue_title: "Failure: Create Draft Release workflow"
         issue_body: |
-          Create Draft Release workflow [failed](https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}).
-        comment_body: |
-           Another failure occurred: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
+          Create Draft Release workflow [failed](https://github.com/${{github.repository}}/actions/runs/${{github
+  
