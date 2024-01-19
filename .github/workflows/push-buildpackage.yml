@@ -28,7 +28,7 @@ jobs:
       with:
         url: ${{ steps.event.outputs.download_url }}
         output: "/github/workspace/buildpackage.cnb"
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
 
     - name: Validate version
       run: |
@@ -63,7 +63,7 @@ jobs:
         id: ${{ github.repository }}
         version: ${{ steps.event.outputs.tag_full }}
         address: ${{ steps.push.outputs.image }}@${{ steps.push.outputs.digest }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
 
   failure:
     name: Alert on Failure

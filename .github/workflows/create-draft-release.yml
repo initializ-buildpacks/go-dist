@@ -99,12 +99,12 @@ jobs:
       uses: initializ-buildpacks/github-config/actions/release/notes@main
       with:
         repo: ${{ github.repository }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
     - name: Create Release
       uses: initializ-buildpacks/github-config/actions/release/create@main
       with:
         repo: ${{ github.repository }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
         tag_name: v${{ steps.tag.outputs.tag }}
         target_commitish: ${{ github.sha }}
         name: v${{ steps.tag.outputs.tag }}
