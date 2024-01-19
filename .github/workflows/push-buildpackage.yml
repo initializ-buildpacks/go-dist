@@ -47,6 +47,7 @@ jobs:
         aws-region: ${{ secrets.AWS_PUBLICECR_REGION }}
         role-session-name: GitHub-OIDC-SECURE-IMAGES
 
+    - name: Push The cnb
       run: |
       
           aws ecr get-login-password --region ${{ secrets.AWS_PUBLICECR_REGION }} | sudo docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}
