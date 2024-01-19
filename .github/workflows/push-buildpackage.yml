@@ -24,7 +24,7 @@ jobs:
 
     - name: Download
       id: download
-      uses: paketo-buildpacks/github-config/actions/release/download-asset@main
+      uses: initializ-buildpacks/github-config/actions/release/download-asset@main
       with:
         url: ${{ steps.event.outputs.download_url }}
         output: "/github/workspace/buildpackage.cnb"
