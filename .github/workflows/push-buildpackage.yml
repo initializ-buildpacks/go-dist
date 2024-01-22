@@ -61,10 +61,10 @@ jobs:
       
           aws ecr get-login-password --region ${{ secrets.AWS_PUBLICECR_REGION }} | sudo docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}
   
-          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://secrets.secrets.AWS_ACCOUNT_ID/secrets.BUILDPACK_NAME:${{ steps.event.outputs.tag_full }}"
-          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://secrets.secrets.AWS_ACCOUNT_ID/secrets.BUILDPACK_NAME:${{ steps.event.outputs.tag_minor }}"
-          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://secrets.secrets.AWS_ACCOUNT_ID/secrets.BUILDPACK_NAME:${{ steps.event.outputs.tag_major }}"
-          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://secrets.secrets.AWS_ACCOUNT_ID/secrets.BUILDPACK_NAME:latest"
+          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://secrets.AWS_ACCOUNT_ID/secrets.BUILDPACK_NAME:${{ steps.event.outputs.tag_full }}"
+          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://secrets.AWS_ACCOUNT_ID/secrets.BUILDPACK_NAME:${{ steps.event.outputs.tag_minor }}"
+          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://secrets.AWS_ACCOUNT_ID/secrets.BUILDPACK_NAME:${{ steps.event.outputs.tag_major }}"
+          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://secrets.AWS_ACCOUNT_ID/secrets.BUILDPACK_NAME:latest"
     
     - name: Register with CNB Registry
       uses: docker://ghcr.io/buildpacks/actions/registry/request-add-entry:main
