@@ -44,7 +44,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1
       with:
         role-to-assume: arn:aws:iam::811001461353:role/initz-public-ecr-gha-role
-        aws-region: "us-east-1"
+        aws-region: us-east-1
         role-session-name: GitHub-OIDC-SECURE-IMAGES
 
     - name: Push The cnb
