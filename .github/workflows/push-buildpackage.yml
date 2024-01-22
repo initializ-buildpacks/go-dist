@@ -45,7 +45,13 @@ jobs:
       with:
         role-to-assume: ${{ secrets.AWS_PUBLICECR_ROLE }}
         aws-region: ${{ secrets.AWS_PUBLICECR_REGION }}
-        role-session-name: GitHub-OIDC-SECURE-IMAGES
+        role-session-name: GitHub-OIDC-BUILDPACK
+
+    - name: Login to Amazon ECR Public
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry-type: public
 
     - name: Push The cnb
       run: |
