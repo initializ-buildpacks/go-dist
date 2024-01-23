@@ -59,26 +59,26 @@ jobs:
     - name: skopeo-copy-action
       uses: coscene-io/skopeo-copy-action@v1.0.0
       with:
-        src: oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb
-        dest: ${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_full }}
+        src-image: oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb
+        dest-image: ${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_full }}
 
     - name: skopeo-copy-action
       uses: coscene-io/skopeo-copy-action@v1.0.0
       with:
-        src: oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb
-        dest: ${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_minor }}
+        src-image: oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb
+        dest-image: ${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_minor }}
 
     - name: skopeo-copy-action
       uses: coscene-io/skopeo-copy-action@v1.0.0
       with:
-        src: oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb
-        dest: ${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_major }}
+        src-image: oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb
+        dest-image: ${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_major }}
 
     - name: skopeo-copy-action
       uses: coscene-io/skopeo-copy-action@v1.0.0
       with:
-        src: oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb
-        dest: ${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:latest
+        src-image: oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb
+        dest-image: ${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:latest
 
     
     - name: Register with CNB Registry
