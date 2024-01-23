@@ -59,6 +59,8 @@ jobs:
     - name: Push The cnb
       run: |
     
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/initializ
+
           sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_full }}"
           sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_minor }}"
           sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_major }}"
