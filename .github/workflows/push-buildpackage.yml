@@ -56,15 +56,16 @@ jobs:
       with:
         registry-type: public
 
-    - name: Push The cnb
+    - name: skopeo-copy-action
+      uses: coscene-io/skopeo-copy-action@v1.0.0
       run: |
-    
-          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/initializ
+        aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/initializ
 
-          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_full }}"
-          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_minor }}"
-          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_major }}"
-          sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:latest"
+        sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_full }}"
+        sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_minor }}"
+        sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_major }}"
+        sudo skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:latest"
+
     
     - name: Register with CNB Registry
       uses: docker://ghcr.io/buildpacks/actions/registry/request-add-entry:main
