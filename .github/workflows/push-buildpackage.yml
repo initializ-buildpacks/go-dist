@@ -64,13 +64,6 @@ jobs:
          skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:latest"
       
     
-    - name: Register with CNB Registry
-      uses: docker://ghcr.io/buildpacks/actions/registry/request-add-entry:main
-      with:
-        id: ${{ github.repository }}
-        version: ${{ steps.event.outputs.tag_full }}
-        address: ${{ steps.push.outputs.image }}@${{ steps.push.outputs.digest }}
-        token: ${{ secrets.PAT }}
 
   failure:
     name: Alert on Failure
