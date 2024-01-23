@@ -57,22 +57,11 @@ jobs:
         registry-type: public
 
     - name: Push The cnb
-      run:
-        - name: Push Full Tag
-          id: push-full-tag
-          run: skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_full }}"     
-      
-        - name: Push Minor Tag
-          id: push-minor-tag
-          run: skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_minor }}"
-
-        - name: Push Major Tag
-          id: push-major-tag
-          run: skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_major }}"
-      
-        - name: Push Latest
-          id: push-latest
-          run: skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:latest"
+      run: |
+         skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_full }}"       
+         skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_minor }}"
+         skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:${{ steps.event.outputs.tag_major }}"      
+         skopeo copy "oci-archive:${GITHUB_WORKSPACE}/buildpackage.cnb" "docker://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.BUILDPACK_NAME }}:latest"
       
     
     - name: Register with CNB Registry
