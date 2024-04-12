@@ -221,20 +221,7 @@ jobs:
           echo "artifact-file=$(basename ./*.tgz)" >> "$GITHUB_OUTPUT"
           echo "checksum-file=$(basename ./*.tgz.checksum)" >> "$GITHUB_OUTPUT"
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_S3_DEPENDENCIES_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_S3_DEPENDENCIES_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
 
-      - name: Upload to S3
-        id: upload
-        uses: paketo-buildpacks/github-config/actions/dependency/upload-to-s3@main
-        with:
-          bucket-name: "paketo-buildpacks"
-          dependency-name: ${{ needs.retrieve.outputs.id }}
-          artifact-path: ${{ steps.get-file-names.outputs.artifact-file }}
 
       - name: Get Checksum
         id: get-checksum
@@ -247,7 +234,7 @@ jobs:
 
       - name: Update `checksum` and `uri` in metadata for ${{ matrix.includes.target }} ${{ matrix.includes.version }}
         if: ${{ matrix.includes.checksum == '' && matrix.includes.uri == '' }}
-        uses: paketo-buildpacks/github-config/actions/dependency/update-metadata-json@main
+        uses: initializ-buildpacks/github-config/actions/dependency/update-metadata-json@main
         with:
           version: ${{ matrix.includes.version }}
           target: ${{ matrix.includes.target }}
@@ -282,7 +269,7 @@ jobs:
       - name: Checkout Branch
         uses: initializ-buildpacks/github-config/actions/pull-request/checkout-branch@main
         with:
-          branch: automation/dependencies/update-from-metadata
+          branch: main
 
       - name: Make Temporary Artifact Directory
         id: make-outputdir
@@ -297,7 +284,7 @@ jobs:
 
       - name: Update dependencies from metadata.json
         id: update
-        uses: paketo-buildpacks/github-config/actions/dependency/update-from-metadata@main
+        uses: initializ-buildpacks/github-config/actions/dependency/update-from-metadata@main
         with:
           buildpack_toml_path: "${{ github.workspace }}/buildpack.toml"
           metadata_file_path: "${{ steps.make-outputdir.outputs.outputdir }}/metadata.json"
@@ -308,22 +295,22 @@ jobs:
 
       - name: Commit
         id: commit
-        uses: paketo-buildpacks/github-config/actions/pull-request/create-commit@main
+        uses: initializ-buildpacks/github-config/actions/pull-request/create-commit@main
         with:
           message: "Updating buildpack.toml with new versions ${{ steps.update.outputs.new-versions }}"
           pathspec: "."
-          keyid: ${{ secrets.PAKETO_BOT_GPG_SIGNING_KEY_ID }}
-          key: ${{ secrets.PAKETO_BOT_GPG_SIGNING_KEY }}
+          keyid: ${{ secrets.PAT }}
+          key: ${{ secrets.PAT }}
 
-      - name: Push Branch 'automation/dependencies/update-from-metadata'
+      - name: Push Branch 'main'
         if: ${{ steps.commit.outputs.commit_sha != '' }}
-        uses: paketo-buildpacks/github-config/actions/pull-request/push-branch@main
+        uses: initializ-buildpacks/github-config/actions/pull-request/push-branch@main
         with:
           branch: main
 
       # - name: Open Pull Request
       #   if: ${{ steps.commit.outputs.commit_sha != '' }}
-      #   uses: paketo-buildpacks/github-config/actions/pull-request/open@main
+      #   uses: initializ-buildpacks/github-config/actions/pull-request/open@main
       #   with:
       #     token: ${{ secrets.PAKETO_BOT_GITHUB_TOKEN }}
       #     title: "Updates buildpack.toml with ${{ steps.update.outputs.new-versions }}"
@@ -336,7 +323,7 @@ jobs:
     if: ${{ always() && needs.retrieve.result == 'failure' || needs.get-compile-and-test.result == 'failure' || needs.test.result == 'failure' || needs.compile.result == 'failure' || needs.update-metadata.result == 'failure' || needs.assemble.result == 'failure' }}
     steps:
       - name: File Failure Alert Issue
-        uses: paketo-buildpacks/github-config/actions/issue/file@main
+        uses: initializ-buildpacks/github-config/actions/issue/file@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repo: ${{ github.repository }}
