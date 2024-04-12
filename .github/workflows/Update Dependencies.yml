@@ -280,7 +280,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Checkout Branch
-        uses: paketo-buildpacks/github-config/actions/pull-request/checkout-branch@main
+        uses: initializ-buildpacks/github-config/actions/pull-request/checkout-branch@main
         with:
           branch: automation/dependencies/update-from-metadata
 
@@ -319,15 +319,15 @@ jobs:
         if: ${{ steps.commit.outputs.commit_sha != '' }}
         uses: paketo-buildpacks/github-config/actions/pull-request/push-branch@main
         with:
-          branch: automation/dependencies/update-from-metadata
+          branch: main
 
-      - name: Open Pull Request
-        if: ${{ steps.commit.outputs.commit_sha != '' }}
-        uses: paketo-buildpacks/github-config/actions/pull-request/open@main
-        with:
-          token: ${{ secrets.PAKETO_BOT_GITHUB_TOKEN }}
-          title: "Updates buildpack.toml with ${{ steps.update.outputs.new-versions }}"
-          branch: automation/buildpack.toml/update-from-metadata
+      # - name: Open Pull Request
+      #   if: ${{ steps.commit.outputs.commit_sha != '' }}
+      #   uses: paketo-buildpacks/github-config/actions/pull-request/open@main
+      #   with:
+      #     token: ${{ secrets.PAKETO_BOT_GITHUB_TOKEN }}
+      #     title: "Updates buildpack.toml with ${{ steps.update.outputs.new-versions }}"
+      #     branch: automation/buildpack.toml/update-from-metadata
 
   failure:
     name: Alert on Failure
