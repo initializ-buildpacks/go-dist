@@ -263,8 +263,8 @@ jobs:
     if: always() && needs.retrieve.result == 'success' && needs.retrieve.outputs.length > 0 && (needs.test.result == 'success' || needs.test.result == 'skipped') && (needs.compile.result == 'success' || needs.compile.result == 'skipped') && (needs.update-metadata.result == 'success' || needs.update-metadata.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
-      # - name: Check out code
-      #   uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v3
 
       # - name: Checkout Branch
       #   uses: initializ-buildpacks/github-config/actions/pull-request/checkout-branch@main
