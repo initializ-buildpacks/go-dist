@@ -267,8 +267,10 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Checkout Branch
-        uses: initializ-buildpacks/github-config/actions/pull-request/checkout-branch@main
+      # - name: Checkout Branch
+      #   uses: initializ-buildpacks/github-config/actions/pull-request/checkout-branch@main
+      #   with:
+      #     branch: main
 
       - name: Make Temporary Artifact Directory
         id: make-outputdir
@@ -292,13 +294,32 @@ jobs:
         run: |
           git diff
 
+      - name: Import GPG Key
+        id: import-gpg-key
+        uses: crazy-max/ghaction-import-gpg@v6.1.0
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          git_commit_gpgsign: true
+          git_tag_gpgsign: true
+          git_push_gpgsign: if-asked
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          PASSPHRASE: ${{ secrets.PASSPHRASE }}
+
+      - name: Export GPG Key ID
+        run: echo "GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | awk '/^sec/{print $2}' | cut -d '/' -f 2)" >> $GITHUB_ENV
+
+      - name: Set the global-flag
+        run: sudo git config --system --add safe.directory '*'
+
       - name: Commit
         id: commit
         uses: initializ-buildpacks/github-config/actions/pull-request/create-commit@main
         with:
           message: "Updating buildpack.toml with new versions ${{ steps.update.outputs.new-versions }}"
           pathspec: "."
-          keyid: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY_ID }}
+          keyid: ${{ env.GPG_KEY_ID }}
           key: ${{ secrets.GPG_PRIVATE_KEY }}
 
 
