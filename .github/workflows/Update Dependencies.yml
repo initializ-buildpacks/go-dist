@@ -312,8 +312,8 @@ jobs:
         with:
           message: "Updating buildpack.toml with new versions ${{ steps.update.outputs.new-versions }}"
           pathspec: "."
-          keyid: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY_ID }}
-          key: ${{ secrets.GPG_PRIVATE_KEY }}
+          # keyid: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY_ID }}
+          # key: ${{ secrets.GPG_PRIVATE_KEY }}
 
       - name: Push Branch 'main'
         if: ${{ steps.commit.outputs.commit_sha != '' }}
