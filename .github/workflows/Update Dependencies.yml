@@ -267,7 +267,7 @@ jobs:
       - name: Import GPG Key
         uses: crazy-max/ghaction-import-gpg@v1
         env:
-          GPG_PRIVATE_KEY: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY_ID }}
+          GPG_PRIVATE_KEY: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY }}
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Check out code
