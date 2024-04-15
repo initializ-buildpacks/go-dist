@@ -307,11 +307,14 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
 
-      - name: Export GPG Key ID
-        run: echo "GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | awk '/^sec/{print $2}' | cut -d '/' -f 2)" >> $GITHUB_ENV
+      # - name: Export GPG Key ID
+      #   run: echo "GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | awk '/^sec/{print $2}' | cut -d '/' -f 2)" >> $GITHUB_ENV
 
-      - name: Set the global-flag
-        run: sudo git config --system --add safe.directory '*'
+      # - name: Set the global-flag
+      #   run: sudo git config --system --add safe.directory '*'
+
+      - name: add exception
+        run: git config --global --add safe.directory /github/workspace
 
       - name: Commit
         id: commit
@@ -319,7 +322,7 @@ jobs:
         with:
           message: "Updating buildpack.toml with new versions ${{ steps.update.outputs.new-versions }}"
           pathspec: "."
-          keyid: ${{ env.GPG_KEY_ID }}
+          keyid: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY_ID }}
           key: ${{ secrets.GPG_PRIVATE_KEY }}
 
 
