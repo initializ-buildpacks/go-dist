@@ -32,14 +32,19 @@ jobs:
         working-directory: dependency
         run: |
           OUTPUT="/tmp/metadata.json"
+
           make retrieve \
             buildpackTomlPath="${{ github.workspace }}/buildpack.toml" \
             output="${OUTPUT}"
+
           id=$(jq -r .[0].id < "${OUTPUT}")
           content=$(jq -r < "${OUTPUT}")
+
           length=$(echo $content | jq -r '. | length')
+
           compilation=$(echo $content | jq -r 'map(select(.checksum == null and .uri == null))'?)
           complength=$(echo $compilation | jq -r '. | length')
+
           delimiter="$(uuidgen)"
           echo "metadata-filepath=${OUTPUT}" >> "$GITHUB_OUTPUT"
           printf "metadata-json<<%s\n%s\n%s\n" "${delimiter}" "${content}" "${delimiter}" >> "$GITHUB_OUTPUT" # see https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
@@ -47,6 +52,8 @@ jobs:
           echo "length=$length" >> "$GITHUB_OUTPUT"
           printf "compilation-json<<%s\n%s\n%s\n" "${delimiter}" "${compilation}" "${delimiter}" >> "$GITHUB_OUTPUT" # see https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
           echo "compilation-length=$complength" >> "$GITHUB_OUTPUT"
+
+
       - name: Upload `${{ steps.retrieve.outputs.metadata-filepath }}`
         uses: actions/upload-artifact@v3
         with:
@@ -65,6 +72,7 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+
       - name: Has Compilation Action?
         id: compile-check
         run: |
@@ -72,6 +80,7 @@ jobs:
             echo "Compilation action provided"
             echo "should-compile=true" >> "$GITHUB_OUTPUT"
           fi
+
       - name: Has Testing Action?
         id: test-check
         run: |
@@ -79,22 +88,6 @@ jobs:
             echo "Testing file provided"
             echo "should-test=true" >> "$GITHUB_OUTPUT"
           fi
-
-  # Configure SSH and GPG
-  configure-ssh-and-gpg:
-    name: Configure SSH and GPG
-    runs-on: ubuntu-latest
-    steps:
-      - name: Configure SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval $(ssh-agent)
-          ssh-add ~/.ssh/id_rsa
-      - name: Configure GPG
-        run: |
-          echo "use-agent" >> ~/.gnupg/gpg.conf
 
   test:
     name: Test Non-Compiled Dependency
@@ -114,10 +107,12 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+
       - name: Make Temporary Artifact Directory
         id: make-outputdir
         run: |
           echo "outputdir=$(mktemp -d)" >> "$GITHUB_OUTPUT"
+
       # Download the tarball for testing if:
       #   (1) dependency testing code is present in the buildpack directory
       #   (2) URI in metadata.json is available
@@ -130,6 +125,7 @@ jobs:
             --silent \
             --location \
             --output ${{ steps.make-outputdir.outputs.outputdir }}/dependency.tgz
+
       # Test the dependency tarball if:
       #   (1) dependency testing code is present in the buildpack directory
       - name: Test Upstream Dependency
@@ -158,10 +154,12 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+
       - name: Make Temporary Artifact Directory
         id: make-outputdir
         run: |
           echo "outputdir=$(mktemp -d)" >> "$GITHUB_OUTPUT"
+
       # Compile if all of the following conditions are met:
       #   (1) compilation Github Action presetn in the buildpack directory
       #   (2) checksum in metadata.json is empty
@@ -174,6 +172,7 @@ jobs:
           version: "${{ matrix.includes.version }}"
           outputdir: "${{ steps.make-outputdir.outputs.outputdir }}"
           target: "${{ matrix.includes.target }}"
+
       # If compiled, upload the tarball and checksum file for usage in the Update metadata job
       - name: Upload workflow asset
         uses: actions/upload-artifact@v3
@@ -181,6 +180,7 @@ jobs:
         with:
           name: '${{ needs.retrieve.outputs.id }}-${{ matrix.includes.version }}-${{ matrix.includes.target }}'
           path: '${{ steps.make-outputdir.outputs.outputdir }}/*'
+
       # Test the dependency tarball if:
       #   (1) dependency testing code is present in the buildpack directory
       - name: Test Dependency
@@ -209,22 +209,29 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+
       - name: Download artifact files
         uses: actions/download-artifact@v3
         with:
           name: '${{ needs.retrieve.outputs.id }}-${{ matrix.includes.version }}-${{ matrix.includes.target }}'
+
       - name: Get artifact file name
         id: get-file-names
         run: |
           echo "artifact-file=$(basename ./*.tgz)" >> "$GITHUB_OUTPUT"
           echo "checksum-file=$(basename ./*.tgz.checksum)" >> "$GITHUB_OUTPUT"
+
+
+
       - name: Get Checksum
         id: get-checksum
         run: echo "checksum=$(cat ${{ steps.get-file-names.outputs.checksum-file }})" >> "$GITHUB_OUTPUT"
+
       - name: Download metadata.json
         uses: actions/download-artifact@v3
         with:
           name: metadata.json
+
       - name: Update `checksum` and `uri` in metadata for ${{ matrix.includes.target }} ${{ matrix.includes.version }}
         if: ${{ matrix.includes.checksum == '' && matrix.includes.uri == '' }}
         uses: initializ-buildpacks/github-config/actions/dependency/update-metadata-json@main
@@ -234,6 +241,7 @@ jobs:
           checksum: ${{ steps.get-checksum.outputs.checksum }}
           uri: ${{ steps.upload.outputs.dependency-uri }}
           file: "metadata.json"
+
       - name: Upload modified metadata
         uses: actions/upload-artifact@v3
         with:
@@ -257,28 +265,34 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+
       # - name: Checkout Branch
       #   uses: initializ-buildpacks/github-config/actions/pull-request/checkout-branch@main
       #   with:
       #     branch: main
+
       - name: Make Temporary Artifact Directory
         id: make-outputdir
         run: |
           echo "outputdir=$(mktemp -d)" >> "$GITHUB_OUTPUT"
+
       - name: Download metadata.json
         uses: actions/download-artifact@v3
         with:
           name: metadata.json
           path: "${{ steps.make-outputdir.outputs.outputdir }}"
+
       - name: Update dependencies from metadata.json
         id: update
         uses: initializ-buildpacks/github-config/actions/dependency/update-from-metadata@main
         with:
           buildpack_toml_path: "${{ github.workspace }}/buildpack.toml"
           metadata_file_path: "${{ steps.make-outputdir.outputs.outputdir }}/metadata.json"
+
       - name: Show git diff
         run: |
           git diff
+
       - name: Commit
         id: commit
         uses: initializ-buildpacks/github-config/actions/pull-request/create-commit@main
@@ -287,11 +301,13 @@ jobs:
           pathspec: "."
           keyid: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY_ID }}
           key: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY }}
+
       - name: Push Branch 'main'
         if: ${{ steps.commit.outputs.commit_sha != '' }}
         uses: initializ-buildpacks/github-config/actions/pull-request/push-branch@main
         with:
           branch: main
+
       # - name: Open Pull Request
       #   if: ${{ steps.commit.outputs.commit_sha != '' }}
       #   uses: initializ-buildpacks/github-config/actions/pull-request/open@main
