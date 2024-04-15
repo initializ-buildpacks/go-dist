@@ -264,8 +264,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Import GPG Key
-        uses: crazy-max/ghaction-import-gpg@v1
+      - name: Import GPG
+        uses: crazy-max/ghaction-import-gpg@v6.1.0            
         env:
           GPG_PRIVATE_KEY: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY }}
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
