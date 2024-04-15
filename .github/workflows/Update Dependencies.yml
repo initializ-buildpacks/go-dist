@@ -306,6 +306,9 @@ jobs:
         run: |
           git diff
 
+      - name: Configure safe directory for Git
+        run: git config --global --add safe.directory /github/workspace
+
       - name: Commit
         id: commit
         uses: initializ-buildpacks/github-config/actions/pull-request/create-commit@main
