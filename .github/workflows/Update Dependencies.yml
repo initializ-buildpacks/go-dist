@@ -293,6 +293,14 @@ jobs:
         run: |
           git diff
 
+      - name : Set the Permission
+        run: |
+          chown -R $(whoami) ~/.gnupg/
+
+          # Also correct the permissions and access rights on the directory
+          chmod 600 ~/.gnupg/*
+          chmod 700 ~/.gnupg
+
       - name: Commit
         id: commit
         uses: initializ-buildpacks/github-config/actions/pull-request/create-commit@main
