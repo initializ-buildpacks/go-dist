@@ -307,7 +307,7 @@ jobs:
           git diff
 
       - name: Configure safe directory for Git
-        run: git config --global --add safe.directory /github/workspace
+        run: git config --global --add safe.directory '*'
 
       - name: Commit
         id: commit
