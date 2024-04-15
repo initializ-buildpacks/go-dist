@@ -264,11 +264,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Import GPG
-        uses: crazy-max/ghaction-import-gpg@v6.1.0            
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY }}
-          PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+- name: Import GPG Key
+      uses: crazy-max/ghaction-import-gpg@v6.1.0
+      with:
+        gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        git_commit_gpgsign: true
+        git_tag_gpgsign: true
+        git_push_gpgsign: if-asked
+      env:
+        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        PASSPHRASE: ${{ secrets.PASSPHRASE }}
 
       - name: Check out code
         uses: actions/checkout@v3
@@ -306,7 +312,7 @@ jobs:
         with:
           message: "Updating buildpack.toml with new versions ${{ steps.update.outputs.new-versions }}"
           pathspec: "."
-          keyid: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY_ID }}
+          keyid: ${{ secrets.GPG_PRIVATE_KEY }}
           key: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY }}
 
       - name: Push Branch 'main'
