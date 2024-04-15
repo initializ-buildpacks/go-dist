@@ -263,6 +263,13 @@ jobs:
     if: always() && needs.retrieve.result == 'success' && needs.retrieve.outputs.length > 0 && (needs.test.result == 'success' || needs.test.result == 'skipped') && (needs.compile.result == 'success' || needs.compile.result == 'skipped') && (needs.update-metadata.result == 'success' || needs.update-metadata.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
+
+      - name: Import GPG Key
+        uses: crazy-max/ghaction-import-gpg@v1
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY_ID }}
+          PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
       - name: Check out code
         uses: actions/checkout@v3
 
@@ -292,14 +299,6 @@ jobs:
       - name: Show git diff
         run: |
           git diff
-
-      - name : Set the Permission
-        run: |
-          chown -R $(whoami) ~/.gnupg/
-
-          # Also correct the permissions and access rights on the directory
-          chmod 600 ~/.gnupg/*
-          chmod 700 ~/.gnupg
 
       - name: Commit
         id: commit
