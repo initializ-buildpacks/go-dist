@@ -38,7 +38,7 @@ jobs:
       id: unverified-commits
       uses: initializ-buildpacks/github-config/actions/pull-request/check-unverified-commits@main
       with:
-        token: ${{ secrets.INITIALIZ_BOT_REVIEWER_GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
         repo: ${{ github.repository }}
         number: ${{ needs.download.outputs.pr-number }}
 
@@ -46,7 +46,7 @@ jobs:
       id: human-commits
       uses: initializ-buildpacks/github-config/actions/pull-request/check-human-commits@main
       with:
-        token: ${{ secrets.INITIALIZ_BOT_REVIEWER_GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
         repo: ${{ github.repository }}
         number: ${{ needs.download.outputs.pr-number }}
 
@@ -58,7 +58,7 @@ jobs:
       if: steps.human-commits.outputs.human_commits == 'false' && steps.unverified-commits.outputs.unverified_commits == 'false'
       uses: initializ-buildpacks/github-config/actions/pull-request/approve@main
       with:
-        token: ${{ secrets.INITIALIZ_BOT_REVIEWER_GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
         number: ${{ needs.download.outputs.pr-number }}
 
     - name: Enable Auto-Merge
