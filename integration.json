@@ -1,7 +1,6 @@
 {
   "builders": [
-    "initializbuildpacks/securepacks-initzbuilder",
-    "paketobuildpacks/builder-jammy-buildpackless-base"
-  ],
+    "initializbuildpacks/securepacks-initzbuilder"  ],
+    
   "buildplan": "github.com/paketo-community/build-plan"
 }
