@@ -1,70 +1,53 @@
 # Go Distribution Cloud Native Buildpack
 
-The Go Distribution CNB provides the Go binary distribution that can be used to
-execute [Go tooling](https://golang.org/cmd/go/). The buildpack installs the Go
-binary distribution onto the `$PATH` which makes it available for subsequent
-buildpacks. These buildpacks can then use that distribution to run Go tooling
-including building Go application binaries. Examples of buildpacks that perform
-this binary building process include the [Go Mod
-CNB](https://github.com/initializ-buildpacks/go-mod-vendor) and the [Dep
-CNB](https://github.com/paketo-buildpacks/dep).
+The Go Distribution CNB delivers the Go binary distribution essential for executing [Go tooling](https://golang.org/cmd/go/). This buildpack seamlessly installs the Go binary distribution onto the `$PATH`, ensuring its accessibility for subsequent buildpacks. Leveraging this distribution, buildpacks can effortlessly execute Go tooling tasks, including the compilation of Go application binaries.
 
 ## Integration
 
-The Go Distribution CNB provides Go as a dependency. Downstream buildpacks, like
-[Go Mod](https://github.com/initializ-buildpacks/go-mod) or
-[Dep](https://github.com/paketo-buildpacks/dep), can require the go dependency
-by generating a [Build Plan
-TOML](https://github.com/buildpacks/spec/blob/master/buildpack.md#build-plan-toml)
-file that looks like the following:
+The Go Distribution CNB serves as a supplier of Go as a dependency. Subsequent buildpacks, such as [Go Mod](https://github.com/initializ-buildpacks/go-mod), can specify the requirement for the Go dependency by generating a [Build Plan TOML](https://github.com/buildpacks/spec/blob/master/buildpack.md#build-plan-toml) file structured similarly to the following:
 
 ```toml
 [[requires]]
 
-  # The name of the  dependency is "go". This value is considered
-  # part of the public API for the buildpack and will not change without a plan
-  # for deprecation.
+  # The dependency name is "go," an integral part of the buildpack's public API,
+  # ensuring stability unless deprecated.
   name = "go"
 
-  # The version of the Go dependency is not required. In the case it
-  # is not specified, the buildpack will provide the default version, which can
-  # be seen in the buildpack.toml file.
-  # If you wish to request a specific version, the buildpack supports
-  # specifying a semver constraint in the form of "1.*", "1.13.*", or even
-  # "1.13.9".
+  # The version of the Go dependency is optional. If not specified, the buildpack
+  # defaults to the version indicated in the buildpack.toml file.
+  # To request a specific version, utilize semver constraints such as "1.*", "1.13.*",
+  # or even "1.13.9".
   version = "1.13.9"
 
-  # The Go buildpack supports some non-required metadata options.
+  # The Go buildpack offers additional non-mandatory metadata options.
   [requires.metadata]
 
-    # Setting the build flag to true will ensure that the Go
-    # depdendency is available on the $PATH for subsequent buildpacks during
-    # their build phase. If you are writing a buildpack that needs to run Go
-    # during its build process, this flag should be set to true.
+    # Enabling the build flag ensures the Go dependency is accessible
+    # on the $PATH for subsequent buildpacks during their build phase.
+    # Set this flag to true if your buildpack requires Go during its build process.
     build = true
 
-    # Setting the launch flag to true will ensure that the Go
-    # dependency is available on the $PATH for the running application. If you are
-    # writing an application that needs to run Go at runtime, this flag should
-    # be set to true.
+    # Enabling the launch flag ensures the Go dependency is available
+    # on the $PATH for the running application.
+    # Set this flag to true if your application needs to execute Go at runtime.
     launch = true
 ```
 
 ## Usage
 
-To package this buildpack for consumption:
+To package this buildpack for distribution:
 
 ```
 $ ./scripts/package.sh
 ```
 
-This builds the buildpack's Go source using `GOOS=linux` by default. You can
-supply another value as the first argument to `package.sh`.
+By default, the build script packages the buildpack's Go source using GOOS=linux.
+You can specify another value as the first argument to package.sh.
+
 
 ## Go Build Configuration
 
-To configure the Go version, please use the `BP_GO_VERSION` environment
-variable at build time either directly
-(ex. `pack build my-app --env BP_GO_VERSION=~1.14.1`) or through a
-[`project.toml`
+To configure the Go version, utilize the BP_GO_VERSION environment variable
+during build time, either directly (e.g., pack build my-app --env BP_GO_VERSION=~1.14.1)
+or through a project.toml file.`
 file](https://github.com/buildpacks/spec/blob/main/extensions/project-descriptor.md).
