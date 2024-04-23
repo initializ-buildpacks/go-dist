@@ -221,8 +221,6 @@ jobs:
           echo "artifact-file=$(basename ./*.tgz)" >> "$GITHUB_OUTPUT"
           echo "checksum-file=$(basename ./*.tgz.checksum)" >> "$GITHUB_OUTPUT"
 
-
-
       - name: Get Checksum
         id: get-checksum
         run: echo "checksum=$(cat ${{ steps.get-file-names.outputs.checksum-file }})" >> "$GITHUB_OUTPUT"
@@ -263,14 +261,13 @@ jobs:
     if: always() && needs.retrieve.result == 'success' && needs.retrieve.outputs.length > 0 && (needs.test.result == 'success' || needs.test.result == 'skipped') && (needs.compile.result == 'success' || needs.compile.result == 'skipped') && (needs.update-metadata.result == 'success' || needs.update-metadata.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
-
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      # - name: Checkout Branch
-      #   uses: initializ-buildpacks/github-config/actions/pull-request/checkout-branch@main
-      #   with:
-      #     branch: main
+      - name: Checkout Branch
+        uses: initializ-buildpacks/github-config/actions/pull-request/checkout-branch@main
+        with:
+          branch: automation/dependencies/update-from-metadata
 
       - name: Make Temporary Artifact Directory
         id: make-outputdir
@@ -294,51 +291,28 @@ jobs:
         run: |
           git diff
 
-      - name: Import GPG Key
-        id: import-gpg-key
-        uses: crazy-max/ghaction-import-gpg@v6.1.0
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          git_commit_gpgsign: true
-          git_tag_gpgsign: true
-          git_push_gpgsign: if-asked
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          PASSPHRASE: ${{ secrets.PASSPHRASE }}
-
-      - name: Export GPG Key ID
-        run: echo "GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | awk '/^sec/{print $2}' | cut -d '/' -f 2)" >> $GITHUB_ENV
-
-      # - name: Set the global-flag
-      #   run: sudo git config --system --add safe.directory '*'
-
-      - name: add exception
-        run: git config --global --add safe.directory /github/workspace
-
       - name: Commit
         id: commit
         uses: initializ-buildpacks/github-config/actions/pull-request/create-commit@main
         with:
           message: "Updating buildpack.toml with new versions ${{ steps.update.outputs.new-versions }}"
           pathspec: "."
-          keyid: ${{ env.GPG_KEY_ID }}
+          keyid: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY_ID }}
           key: ${{ secrets.GPG_PRIVATE_KEY }}
 
-
-      - name: Push Branch 'main'
+      - name: Push Branch 'automation/dependencies/update-from-metadata'
         if: ${{ steps.commit.outputs.commit_sha != '' }}
         uses: initializ-buildpacks/github-config/actions/pull-request/push-branch@main
         with:
-          branch: main
+          branch: automation/dependencies/update-from-metadata
 
-      # - name: Open Pull Request
-      #   if: ${{ steps.commit.outputs.commit_sha != '' }}
-      #   uses: initializ-buildpacks/github-config/actions/pull-request/open@main
-      #   with:
-      #     token: ${{ secrets.PAKETO_BOT_GITHUB_TOKEN }}
-      #     title: "Updates buildpack.toml with ${{ steps.update.outputs.new-versions }}"
-      #     branch: automation/buildpack.toml/update-from-metadata
+      - name: Open Pull Request
+        if: ${{ steps.commit.outputs.commit_sha != '' }}
+        uses: initializ-buildpacks/github-config/actions/pull-request/open@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Updates buildpack.toml with ${{ steps.update.outputs.new-versions }}"
+          branch: automation/buildpack.toml/update-from-metadata
 
   failure:
     name: Alert on Failure
