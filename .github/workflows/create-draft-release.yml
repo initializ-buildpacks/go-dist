@@ -36,6 +36,7 @@ jobs:
         builders="$(util::builders::list "${{ github.workspace }}/integration.json")"
         printf "Output: %s\n" "${builders}"
         printf "builders=%s\n" "${builders}" >> "$GITHUB_OUTPUT"
+
   integration:
     name: Integration Tests
     runs-on: ubuntu-22.04
@@ -122,6 +123,7 @@ jobs:
               "content_type": "application/gzip"
             }
           ]
+
   failure:
     name: Alert on Failure
     runs-on: ubuntu-22.04

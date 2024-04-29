@@ -298,7 +298,7 @@ jobs:
           message: "Updating buildpack.toml with new versions ${{ steps.update.outputs.new-versions }}"
           pathspec: "."
           keyid: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY_ID }}
-          key: ${{ secrets.GPG_PRIVATE_KEY }}
+          key: ${{ secrets.INITIALIZ_BOT_GPG_SIGNING_KEY }}
 
       - name: Push Branch 'automations/dependencies/update-from-metadata'
         if: ${{ steps.commit.outputs.commit_sha != '' }}
@@ -310,7 +310,7 @@ jobs:
         if: ${{ steps.commit.outputs.commit_sha != '' }}
         uses: initializ-buildpacks/github-config/actions/pull-request/open@main
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
           title: "Updates buildpack.toml with ${{ steps.update.outputs.new-versions }}"
           branch: automations/buildpack.toml/update-from-metadata
 
