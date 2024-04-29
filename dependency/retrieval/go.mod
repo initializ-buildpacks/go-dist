@@ -22,14 +22,14 @@ require (
 	github.com/Microsoft/hcsshim v0.9.10 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20230828082145-3c4c8a2d2371 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.0 // indirect
-	github.com/cloudflare/circl v1.3.3 // indirect
+	github.com/cloudflare/circl v1.3.7 // indirect
 	github.com/containerd/containerd v1.6.26 // indirect
 	github.com/containerd/log v0.1.0 // indirect
 	github.com/cpuguy83/dockercfg v0.3.1 // indirect
 	github.com/cyphar/filepath-securejoin v0.2.4 // indirect
 	github.com/dgryski/go-minhash v0.0.0-20170608043002-7fe510aff544 // indirect
 	github.com/docker/distribution v2.8.2+incompatible // indirect
-	github.com/docker/docker v24.0.7+incompatible // indirect
+	github.com/docker/docker v24.0.9+incompatible // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/ekzhu/minhash-lsh v0.0.0-20171225071031-5c06ee8586a1 // indirect
@@ -68,11 +68,11 @@ require (
 	github.com/testcontainers/testcontainers-go v0.19.0 // indirect
 	github.com/ulikunitz/xz v0.5.11 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
-	golang.org/x/crypto v0.17.0 // indirect
+	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/exp v0.0.0-20230202163644-54bba9f4231b // indirect
 	golang.org/x/mod v0.12.0 // indirect
-	golang.org/x/net v0.19.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
+	golang.org/x/net v0.23.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.13.0 // indirect
 	gonum.org/v1/gonum v0.7.0 // indirect
