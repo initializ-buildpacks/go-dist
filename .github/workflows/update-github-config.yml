@@ -5,9 +5,6 @@ on:
   - cron: '27 13 * * *' # daily at 13:27 UTC
   workflow_dispatch: {}
 
-permissions: 
-      contents: write
-
 concurrency: github_config_update
 
 jobs:
@@ -26,7 +23,6 @@ jobs:
       with:
         repository: initializ-buildpacks/github-config
         path: github-config
-        token: ${{ secrets.PAT }}
 
     - name: Checkout Branch
       uses: initializ-buildpacks/github-config/actions/pull-request/checkout-branch@main
@@ -59,7 +55,7 @@ jobs:
 
     - name: Open Pull Request
       if: ${{ steps.commit.outputs.commit_sha != '' }}
-      uses: paketo-buildpacks/github-config/actions/pull-request/open@main
+      uses: initializ-buildpacks/github-config/actions/pull-request/open@main
       with:
         token: ${{ secrets.PAT }}
         title: "Updates github-config"

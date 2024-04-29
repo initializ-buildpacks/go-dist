@@ -22,7 +22,7 @@ jobs:
         repo: ${{ github.repository }}
         run_id: ${{ github.event.workflow_run.id }}
         workspace: "/github/workspace"
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
     - id: pr-data
       run: |
         echo "author=$(cat event.json | jq -r '.pull_request.user.login')" >> "$GITHUB_OUTPUT"
@@ -66,4 +66,4 @@ jobs:
       run: |
         gh pr merge ${{ needs.download.outputs.pr-number }} --auto --rebase
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT }}
