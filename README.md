@@ -35,7 +35,7 @@ The Go Distribution CNB serves as a supplier of Go as a dependency. Subsequent b
 
 ## Usage
 
-To package this buildpack for distribution:
+To package this buildpack for distribution:-
 
 ```
 $ ./scripts/package.sh
