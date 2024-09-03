@@ -16,7 +16,7 @@ api = "0.7"
   include-files = ["bin/run", "bin/build", "bin/detect", "buildpack.toml"]
   pre-package = "./scripts/build.sh"
   [metadata.default-versions]
-    go = "1.21.*"
+    go = "1.22.*"
 
   [[metadata.dependencies]]
     checksum = "sha256:904b924d435eaea086515bc63235b192ea441bd8c9b198c507e85009e6e4c7f0"
