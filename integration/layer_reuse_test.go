@@ -166,7 +166,7 @@ func testLayerReuse(t *testing.T, context spec.G, it spec.S) {
 			firstImage, _, err := pack.WithNoColor().Build.
 				WithPullPolicy("never").
 				WithBuildpacks(buildpack, buildPlanBuildpack).
-				WithEnv(map[string]string{"BP_GO_VERSION": "1.21.*"}).
+				WithEnv(map[string]string{"BP_GO_VERSION": "1.22.*"}).
 				Execute(name, source)
 			Expect(err).NotTo(HaveOccurred())
 
