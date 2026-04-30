@@ -6,7 +6,7 @@ on:
     - cron: '57 13 * * *' # daily at 13:57 UTC
 
 env:
-  AWS_REGION : "us-east-1"
+  AWS_REGION: "us-east-1"
 permissions:
   id-token: write   # This is required for requesting the JWT
   contents: write    # This is required for actions/checkout
@@ -232,7 +232,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume:  ${{ secrets.ROLE }}
+          role-to-assume: ${{ secrets.ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
 
