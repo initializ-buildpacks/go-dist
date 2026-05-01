@@ -6,7 +6,7 @@ on:
     - cron: '57 13 * * *' # daily at 13:57 UTC
 
 env:
-  AWS_REGION : "us-east-1"   
+  AWS_REGION: "us-east-1"
 permissions:
   id-token: write   # This is required for requesting the JWT
   contents: write    # This is required for actions/checkout
@@ -26,11 +26,11 @@ jobs:
       compilation-length: ${{ steps.retrieve.outputs.compilation-length }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
-        
+        uses: actions/checkout@v4
+
 
       - name: Setup Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: 'stable'
 
@@ -62,7 +62,7 @@ jobs:
 
 
       - name: Upload `${{ steps.retrieve.outputs.metadata-filepath }}`
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: metadata.json
           path: ${{ steps.retrieve.outputs.metadata-filepath }}
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Has Compilation Action?
         id: compile-check
@@ -113,7 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Make Temporary Artifact Directory
         id: make-outputdir
@@ -160,7 +160,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Make Temporary Artifact Directory
         id: make-outputdir
@@ -182,7 +182,7 @@ jobs:
 
       # If compiled, upload the tarball and checksum file for usage in the Update metadata job
       - name: Upload workflow asset
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ needs.get-compile-and-test.outputs.should-compile && matrix.includes.checksum == '' && matrix.includes.uri == '' }}
         with:
           name: '${{ needs.retrieve.outputs.id }}-${{ matrix.includes.version }}-${{ matrix.includes.target }}'
@@ -215,10 +215,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download artifact files
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: '${{ needs.retrieve.outputs.id }}-${{ matrix.includes.version }}-${{ matrix.includes.target }}'
 
@@ -228,11 +228,11 @@ jobs:
           echo "artifact-file=$(basename ./*.tgz)" >> "$GITHUB_OUTPUT"
           echo "checksum-file=$(basename ./*.tgz.checksum)" >> "$GITHUB_OUTPUT"
 
-      
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume:  ${{ secrets.ROLE }}
+          role-to-assume: ${{ secrets.ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
 
@@ -249,7 +249,7 @@ jobs:
         run: echo "checksum=$(cat ${{ steps.get-file-names.outputs.checksum-file }})" >> "$GITHUB_OUTPUT"
 
       - name: Download metadata.json
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: metadata.json
 
@@ -264,7 +264,7 @@ jobs:
           file: "metadata.json"
 
       - name: Upload modified metadata
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "metadata.json"
           path: "metadata.json"
@@ -285,7 +285,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Checkout Branch
         uses: initializ-buildpacks/github-config/actions/pull-request/checkout-branch@main
@@ -298,7 +298,7 @@ jobs:
           echo "outputdir=$(mktemp -d)" >> "$GITHUB_OUTPUT"
 
       - name: Download metadata.json
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: metadata.json
           path: "${{ steps.make-outputdir.outputs.outputdir }}"
